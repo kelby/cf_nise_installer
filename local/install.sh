@@ -45,7 +45,9 @@ fi
 rbenv local 1.9.3-p448
 
 # BOSH CLI and CF commands
+if ! (gem list | grep bundler); then
 gem install bundler cf --no-rdoc --no-ri
+fi
 rbenv rehash
 
 # cf-release
