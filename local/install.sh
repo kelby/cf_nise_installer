@@ -1,5 +1,7 @@
 #!/bin/bash -ex
 
+NISE_DOMAIN=vcap.me
+
 # Detect RVM
 if (rvm >/dev/null 2>&1); then
     echo "Found RVM is installed! RVM is not supported by this installer. Remove it and rerun this script."
