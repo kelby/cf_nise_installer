@@ -1,0 +1,71 @@
+---
+deployment: cf-services-contrib-release
+
+# String '196.168.10.10' will be replaced with the real IP address
+
+jobs:
+- name: micro_services
+  template:
+  - postgresql_gateway_ng
+  - postgresql_node_ng
+  properties:
+    postgresql_node:
+      plan: default
+    uaa_client_id: "cf"
+    uaa_endpoint: http://uaa.192.168.10.10.xip.io
+    uaa_client_auth_credentials:
+      username: services
+      password: c1oudc0w
+
+properties:
+  networks:
+    apps: default
+    management: default
+
+  cc:
+    srv_api_uri: http://api.192.168.10.10.xip.io
+
+  nats:
+    address: 192.168.10.10
+    port: 4222
+    user: nats
+    password: c1oudc0w
+    authorization_timeout: 5
+
+  service_plans:
+    postgresql:
+      default:
+        description: "Developer, 250MB storage, 10 connections"
+        free: true
+        job_management:
+          high_water: 230
+          low_water: 20
+        configuration:
+          capacity: 125
+          max_clients: 10
+          quota_files: 4
+          quota_data_size: 240
+          enable_journaling: true
+          backup:
+            enable: false
+          lifecycle:
+            enable: false
+            serialization: enable
+            snapshot:
+              quota: 1
+
+
+  postgresql_gateway:
+    ip_route: 192.168.10.11
+    token: POSTGRESQL_SERVICE_TOKEN
+    default_plan: default
+    supported_versions: ["9.2"]
+    version_aliases:
+      current: "9.2"
+    cc_api_version: v2
+  postgresql_node:
+    ip_route: 192.168.10.11
+    supported_versions: ["9.2"]
+    default_version: "9.2"
+    max_tmp: 900
+    password: c1oudc0w
